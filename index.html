@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth" data-theme="light" data-lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elian Fernando – Software Engineer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cabinet Grotesk', 'sans-serif'],
+            mono: ['DM Mono', 'monospace'],
+          },
+          colors: {
+            accent: 'var(--tw-accent)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── CSS Custom Properties ── */
+    :root {
+      --btn-text: #ffffff;
+      --bg:       #0e0c0a;
+      --bg2:      #161310;
+      --surface:  #1c1814;
+      --border:   #2e2924;
+      --text:     #f0ece4;
+      --text2:    #8a8070;
+      --accent:   #f07830;
+      --accent2:  #ffa060;
+      --tag-bg:   #241e18;
+      --tag-text: #c8b8a0;
+    }
+    [data-theme="light"] {
+      --bg:       #fafaf8;
+      --bg2:      #f0ede6;
+      --surface:  #ffffff;
+      --border:   #ddd8ce;
+      --text:     #141210;
+      --text2:    #6a6058;
+      --accent:   #c8440a;
+      --accent2:  #e85d1a;
+      --tag-bg:   #f0ede6;
+      --tag-text: #3a3530;
+    }
+
+    /* ── Colorblind modes ── */
+    [data-a11y="deuteranopia"] {
+      --accent:  #0077bb;
+      --accent2: #0099cc;
+      --tag-bg:  #dde8f4;
+      --tag-text:#003a5a;
+    }
+    [data-a11y="tritanopia"] {
+      --accent:  #cc3366;
+      --accent2: #ee4488;
+      --tag-bg:  #f5dde6;
+      --tag-text:#5a0022;
+    }
+    [data-a11y="high-contrast"] {
+      --btn-text: #000000;
+      --bg:      #000000 !important;
+      --bg2:     #111111 !important;
+      --surface: #000000 !important;
+      --border:  #ffffff !important;
+      --text:    #ffffff !important;
+      --text2:   #cccccc !important;
+      --accent:  #ffff00 !important;
+      --accent2: #ffffaa !important;
+      --tag-bg:  #ffff00 !important;
+      --tag-text:#000000 !important;
+    }
+    [data-theme="light"][data-a11y="high-contrast"] {
+      --btn-text: #ffffff;
+      --bg:      #ffffff !important;
+      --bg2:     #f0f0f0 !important;
+      --surface: #ffffff !important;
+      --border:  #000000 !important;
+      --text:    #000000 !important;
+      --text2:   #222222 !important;
+      --accent:  #000080 !important;
+      --accent2: #0000cc !important;
+      --tag-bg:  #000080 !important;
+      --tag-text:#ffffff !important;
+    }
+    [data-a11y="large-text"] { font-size: 120%; }
+
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .35s, color .35s;
+      overflow-x: hidden;
+    }
+    .font-mono { font-family: 'DM Mono', monospace; }
+
+    /* ── Accent ── */
+    .text-accent  { color: var(--accent); }
+    .bg-accent    { background: var(--accent); }
+    .border-accent { border-color: var(--accent); }
+
+    /* ── Surfaces ── */
+    .bg-base   { background: var(--bg); }
+    .bg-base2  { background: var(--bg2); }
+    .bg-surf   { background: var(--surface); }
+    .border-base { border-color: var(--border); }
+    .text-base  { color: var(--text); }
+    .text-muted { color: var(--text2); }
+    .tag-bg    { background: var(--tag-bg); color: var(--tag-text); }
+
+    /* ── Grid BG ── */
+    .grid-bg {
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ── Noise texture overlay ── */
+    .noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: .4;
+      border-radius: inherit;
+    }
+
+    /* ── Glow ── */
+    .glow-accent { box-shadow: 0 0 40px -10px var(--accent); }
+
+    /* ── Nav ── */
+    #navbar {
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background .35s;
+    }
+
+    /* ── Card hover ── */
+    .exp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color .25s, box-shadow .25s, transform .25s;
+      position: relative;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 16px; bottom: 16px;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .exp-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.15); }
+    .exp-card:hover::before { opacity: 1; }
+
+    .skill-pill {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .25rem .7rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      font-weight: 500;
+      margin: .2rem;
+      transition: border-color .2s, color .2s;
+      cursor: default;
+    }
+    .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Btn ── */
+    .btn-accent {
+      background: var(--accent);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 8px;
+      padding: .75rem 1.75rem;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-accent:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 40%, transparent); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .75rem 1.75rem;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Ctrl btn ── */
+    .ctrl-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: .35rem .7rem;
+      font-size: .78rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      white-space: nowrap;
+    }
+    .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── A11y panel ── */
+    .a11y-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 210px;
+      z-index: 999;
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+      display: none;
+    }
+    .a11y-panel.open { display: block; }
+    .a11y-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .4rem .7rem;
+      font-size: .8rem;
+      color: var(--text);
+      margin-bottom: .35rem;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 600;
+    }
+    .a11y-opt:hover, .a11y-opt.active { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Avatar ── */
+    .avatar-ring {
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      color: var(--text2);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .avatar-ring::after {
+      content: '';
+      position: absolute;
+      inset: -50px;
+      background: conic-gradient(from 0deg, var(--accent) 0deg 45deg, transparent 45deg 360deg);
+      opacity: .1;
+      animation: spin 10s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Contact card ── */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .contact-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: var(--tag-bg);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── Fade in ── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ── Focus ── */
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+    /* ── Mobile menu ── */
+    #mobileMenu { display: none; }
+    #mobileMenu.open { display: block; }
+  </style>
+</head>
+<body class="bg-base text-base">
+
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-3">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
+    <!-- Brand -->
+    <a href="#home" class="font-mono text-sm font-medium text-base whitespace-nowrap">
+      <span class="text-accent">//</span> elian.dev
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-1 text-xs font-bold tracking-widest uppercase">
+      <a href="#about"      class="px-3 py-1.5 text-muted hover:text-accent transition-colors" data-i18n="nav.about">Sobre</a>
+      <a href="#experience" class="px-3 py-1.5 text-muted hover:text-accent transition-colors" data-i18n="nav.exp">Experiência</a>
+      <a href="#education"  class="px-3 py-1.5 text-muted hover:text-accent transition-colors" data-i18n="nav.edu">Educação</a>
+      <a href="#skills"     class="px-3 py-1.5 text-muted hover:text-accent transition-colors" data-i18n="nav.skills">Habilidades</a>
+      <a href="#contact"    class="px-3 py-1.5 text-muted hover:text-accent transition-colors" data-i18n="nav.contact">Contato</a>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex items-center gap-2">
+      <button class="ctrl-btn" id="langBtn">🌐 <span id="langLabel">EN</span></button>
+      <button class="ctrl-btn" id="themeBtn" title="Toggle theme"><span id="themeIcon">☀️</span></button>
+      <div class="relative">
+        <button class="ctrl-btn" id="a11yBtn" title="Accessibility">♿</button>
+        <div class="a11y-panel" id="a11yPanel">
+          <p class="font-mono text-xs text-muted uppercase tracking-widest mb-2" data-i18n="a11y.label">Acessibilidade</p>
+          <button class="a11y-opt" data-mode="none"          data-i18n="a11y.none">Padrão</button>
+          <button class="a11y-opt" data-mode="deuteranopia"  data-i18n="a11y.deut">Deuteranopia</button>
+          <button class="a11y-opt" data-mode="tritanopia"    data-i18n="a11y.trit">Tritanopia</button>
+          <button class="a11y-opt" data-mode="high-contrast" data-i18n="a11y.hc">Alto Contraste</button>
+          <button class="a11y-opt" data-mode="large-text"    data-i18n="a11y.lt">Texto Grande</button>
+        </div>
+      </div>
+      <!-- Mobile hamburger -->
+      <button class="ctrl-btn md:hidden" id="menuBtn">☰</button>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="md:hidden px-4 pt-2 pb-4 border-t border-base mt-3">
+    <div class="flex flex-col gap-1 text-sm font-bold tracking-widest uppercase">
+      <a href="#about"      class="py-2 text-muted hover:text-accent" data-i18n="nav.about">Sobre</a>
+      <a href="#experience" class="py-2 text-muted hover:text-accent" data-i18n="nav.exp">Experiência</a>
+      <a href="#education"  class="py-2 text-muted hover:text-accent" data-i18n="nav.edu">Educação</a>
+      <a href="#skills"     class="py-2 text-muted hover:text-accent" data-i18n="nav.skills">Habilidades</a>
+      <a href="#contact"    class="py-2 text-muted hover:text-accent" data-i18n="nav.contact">Contato</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-base">
+  <!-- Grid -->
+  <div class="grid-bg absolute inset-0 opacity-30 pointer-events-none"></div>
+  <!-- Glow blobs -->
+  <div class="absolute top-1/4 right-0 w-[900px] h-[500px] pointer-events-none"
+      style="background: radial-gradient(ellipse, rgba(240,120,48,0.25), transparent 80%); filter: blur(220px);">
+  </div>
+  <div class="absolute bottom-1/3 left-1/4 w-64 h-64 rounded-full pointer-events-none" style="background:radial-gradient(ellipse, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%);"></div>
+
+  <div class="max-w-6xl mx-auto px-4 py-24 w-full relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Text -->
+      <div>
+        <p class="font-mono text-xs tracking-widest uppercase text-accent mb-4" data-i18n="hero.label">→ Engenheiro de Software & Pesquisador</p>
+        <p data-i18n="hero.tagline" class="mono" style="color:var(--accent); opacity:.8; font-size:.9rem; margin-bottom:.3rem;">
+          ✦ Construindo sistemas como constelações
+        </p>
+        <h1 class="font-sans font-black text-base leading-none mb-4" style="font-size:clamp(3rem,8vw,5.5rem);">
+          Elian<br><span class="text-accent">Fernando</span><br>Simões Costa
+        </h1>
+        <p class="font-mono text-sm text-muted leading-relaxed mb-8 max-w-md" data-i18n="hero.sub">
+          Estudante de Ciência da Computação na UFLA.<br>Engenharia de software · Análise de dados · Visão computacional.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="#experience" class="btn-accent" data-i18n="hero.cta1">Ver Experiências</a>
+          <a href="#contact"    class="btn-ghost"  data-i18n="hero.cta2">Entrar em Contato</a>
+        </div>
+        <!-- Stats -->
+        <div class="flex gap-8 mt-12">
+          <div>
+            <div class="font-black text-3xl text-base">3<span class="text-accent">+</span></div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mt-1" data-i18n="stat.years">Anos de exp.</div>
+          </div>
+          <div>
+            <div class="font-black text-3xl text-base">86<span class="text-accent">%</span></div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mt-1" data-i18n="stat.acc">Acurácia ML</div>
+          </div>
+          <div>
+            <div class="font-black text-3xl text-base">99<span class="text-accent">%</span></div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mt-1" data-i18n="stat.red">Redução de tempo</div>
+          </div>
+        </div>
+      </div>
+      <!-- Avatar -->
+      <div class="flex justify-center lg:justify-end">
+        <div class="avatar-ring noise">
+          <div class="star-core">✦</div>
+          <style>
+              .star-core {
+              font-size: 5rem;
+              color: var(--accent);
+              position: relative;
+              z-index: 1;
+
+              /* glow */
+              text-shadow:
+                0 0 10px var(--accent),
+                0 0 20px var(--accent),
+                0 0 40px color-mix(in srgb, var(--accent) 60%, transparent);
+
+              /* animação leve */
+              animation: starPulse 2.5s ease-in-out infinite;
+            }
+            .avatar-ring::after {
+              content: '';
+              position: absolute;
+              inset: -40px;
+              background: conic-gradient(
+                from 0deg,
+                var(--accent) 0deg 20deg,
+                transparent 20deg 360deg
+              );
+              opacity: .15;
+              animation: spin 8s linear infinite;
+            }
+            @keyframes starPulse {
+              0%, 100% {
+                transform: scale(1);
+                opacity: 0.9;
+              }
+              50% {
+                transform: scale(1.15);
+                opacity: 1;
+              }
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 bg-base2">
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="font-mono text-xs text-accent uppercase tracking-widest mb-2" data-i18n="section.about.label">// sobre mim</p>
+    <h2 class="font-black text-base mb-12" style="font-size:clamp(1.8rem,4vw,2.8rem);" data-i18n="section.about.title">Quem sou eu</h2>
+    <div class="grid lg:grid-cols-2 gap-12">
+      <div class="fade-up">
+        <p class="text-muted leading-relaxed text-lg mb-4" data-i18n="about.p1">
+          Estudante de Ciência da Computação na Universidade Federal de Lavras com foco em engenharia de software e análise de dados. Possuo uma base sólida em design de software, sistemas orientados a dados, visão computacional, arquitetura e desenvolvimento back-end.
+        </p>
+        <p class="text-muted leading-relaxed text-lg" data-i18n="about.p2">
+          Atuo na construção de soluções que automatizam processos complexos, com foco em performance, escalabilidade e análise quantitativa.
+        </p>
+      </div>
+      <div class="fade-up">
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="about.lang">Idiomas</h5>
+        <div class="mb-6">
+          <span class="skill-pill">🇧🇷 Português (nativo)</span>
+          <span class="skill-pill">🇺🇸 English (intermediário)</span>
+          <span class="skill-pill">🤟 Libras (básico)</span>
+        </div>
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="about.soft">Soft Skills</h5>
+        <div>
+          <span class="skill-pill" data-i18n="ss.story">Storytelling</span>
+          <span class="skill-pill" data-i18n="ss.creative">Criatividade</span>
+          <span class="skill-pill" data-i18n="ss.team">Trabalho em equipe</span>
+          <span class="skill-pill" data-i18n="ss.lead">Liderança</span>
+          <span class="skill-pill" data-i18n="ss.comm">Comunicação</span>
+          <span class="skill-pill" data-i18n="ss.solve">Resolução de problemas</span>
+          <span class="skill-pill" data-i18n="ss.adapt">Adaptabilidade</span>
+          <span class="skill-pill" data-i18n="ss.ei">Inteligência emocional</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="py-24 bg-base">
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="font-mono text-xs text-accent uppercase tracking-widest mb-2" data-i18n="section.exp.label">// experiência profissional</p>
+    <h2 class="font-black text-base mb-12" style="font-size:clamp(1.8rem,4vw,2.8rem);" data-i18n="section.exp.title">O que já fiz</h2>
+
+    <div class="flex flex-col gap-5">
+
+      <div class="exp-card fade-up">
+        <div class="font-black text-lg text-base mb-1" data-i18n="exp1.role">Iniciação Científica – Análise de Imagens</div>
+        <div class="font-mono text-xs text-accent mb-2">UFLA · Minas Gerais</div>
+        <span class="font-mono text-xs tag-bg px-2 py-1 rounded mb-4 inline-block">01/2025 – 01/2026</span>
+        <ul class="mt-3 space-y-2">
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp1.b1">Desenvolvi solução para mensuração de raízes em imagens com Python, Pandas, NumPy e Scikit-image.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp1.b2">Apliquei técnicas de processamento de imagem e análise matemática para extrair métricas de crescimento.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp1.b3">Possibilitei a comparação do crescimento da retícula de diferentes cepas de cafeeiros.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span class="font-bold text-base" data-i18n="exp1.b4">Redução de 99% no tempo de estimativa: de 2 semanas para 3 minutos.</span></li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-up">
+        <div class="font-black text-lg text-base mb-1" data-i18n="exp2.role">Iniciação Científica – Machine Learning</div>
+        <div class="font-mono text-xs text-accent mb-2">UFLA · Minas Gerais</div>
+        <span class="font-mono text-xs tag-bg px-2 py-1 rounded mb-4 inline-block">01/2024 – 12/2024</span>
+        <ul class="mt-3 space-y-2">
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp2.b1">Projetei e implementei arquitetura de ML Servidor-Cliente para classificação de frutos de café.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp2.b2">Modelo com Random Forest e CNN usando TensorFlow e Keras, com acurácia de até 86%.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp2.b3">Automatizei a detecção de estágios de maturação, reduzindo inspeção manual.</span></li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-up">
+        <div class="font-black text-lg text-base mb-1" data-i18n="exp3.role">Comp Júnior – UI/UX Designer & Dev Back-End & Marketing</div>
+        <div class="font-mono text-xs text-accent mb-2">Comp Júnior · Minas Gerais</div>
+        <span class="font-mono text-xs tag-bg px-2 py-1 rounded mb-4 inline-block">05/2023 – 02/2024</span>
+        <ul class="mt-3 space-y-2">
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp3.b1">Liderança de todo o processo de design: pesquisa, wireframing e protótipos de alta fidelidade no Figma.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp3.b2">Criei e ministrei treinamentos sobre UX/UI e acessibilidade para membros trainees.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp3.b3">Desenvolvi APIs com Node.js e MongoDB: 5 coleções, CRUD completo, tempo médio de resposta &lt;158ms.</span></li>
+          <li class="text-muted text-sm flex gap-2"><span class="text-accent shrink-0">→</span><span data-i18n="exp3.b4">Criação de posts e identidade visual para eventos, com melhora de 23% no engajamento.</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="py-24 bg-base2">
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="font-mono text-xs text-accent uppercase tracking-widest mb-2" data-i18n="section.edu.label">// formação acadêmica</p>
+    <h2 class="font-black text-base mb-12" style="font-size:clamp(1.8rem,4vw,2.8rem);" data-i18n="section.edu.title">Educação</h2>
+    <div class="flex justify-center">
+      <div class="exp-card text-center max-w-sm w-full fade-up">
+        <div class="text-4xl text-accent mb-4">🎓</div>
+        <div class="font-black text-xl text-base mb-1" data-i18n="edu.degree">Ciência da Computação</div>
+        <div class="font-mono text-xs text-muted mb-1">Universidade Federal de Lavras (UFLA)</div>
+        <div class="font-mono text-xs text-muted mb-3">Minas Gerais, Brasil</div>
+        <div class="font-mono text-xs text-accent font-bold">2022 – 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-24 bg-base">
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="font-mono text-xs text-accent uppercase tracking-widest mb-2" data-i18n="section.skills.label">// habilidades técnicas</p>
+    <h2 class="font-black text-base mb-12" style="font-size:clamp(1.8rem,4vw,2.8rem);" data-i18n="section.skills.title">Ferramentas & Tecnologias</h2>
+    <div class="flex flex-col gap-8">
+      <div class="fade-up">
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="skills.lang">Linguagens</h5>
+        <div><span class="skill-pill">Python</span><span class="skill-pill">Java</span><span class="skill-pill">C++</span><span class="skill-pill">JavaScript</span><span class="skill-pill">TypeScript</span></div>
+      </div>
+      <div class="fade-up">
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="skills.web">Web & Back-end</h5>
+        <div><span class="skill-pill">Node.js</span><span class="skill-pill">Vue.js</span><span class="skill-pill">React.js</span><span class="skill-pill">HTML</span><span class="skill-pill">CSS</span><span class="skill-pill">Ionic</span></div>
+      </div>
+      <div class="fade-up">
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="skills.db">Banco de Dados</h5>
+        <div><span class="skill-pill">MySQL</span><span class="skill-pill">MongoDB</span><span class="skill-pill">PostgreSQL</span></div>
+      </div>
+      <div class="fade-up">
+        <h5 class="font-mono text-xs text-muted uppercase tracking-widest mb-3" data-i18n="skills.tools">Ferramentas</h5>
+        <div>
+          <span class="skill-pill">Git / GitHub</span><span class="skill-pill">Scrum</span><span class="skill-pill">Kanban</span><span class="skill-pill">Figma</span>
+          <span class="skill-pill">Postman</span><span class="skill-pill">Insomnia</span><span class="skill-pill">TensorFlow</span>
+          <span class="skill-pill">Scikit-image</span><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 bg-base2">
+  <div class="max-w-6xl mx-auto px-4 min-w-0">
+    <p class="font-mono text-xs text-accent uppercase tracking-widest mb-2" data-i18n="section.contact.label">// vamos conversar</p>
+    <h2 class="font-black text-base mb-12" style="font-size:clamp(1.8rem,4vw,2.8rem);" data-i18n="section.contact.title">Contato</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl">
+      <a href="mailto:elianfernandosc@gmail.com" class="contact-card fade-up">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="font-mono text-xs text-muted uppercase tracking-wider">Email</div>
+          <div class="font-bold text-sm text-base break-all">elianfernandosc@gmail.com</div>
+        </div>
+      </a>
+      <a href="tel:+5535998356054" class="contact-card fade-up">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="font-mono text-xs text-muted uppercase tracking-wider" data-i18n="contact.phone">Telefone</div>
+          <div class="font-bold text-sm text-base">(35) 99835-6054</div>
+        </div>
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="contact-card fade-up">
+        <div class="contact-icon">💻</div>
+        <div>
+          <div class="font-mono text-xs text-muted uppercase tracking-wider">GitHub</div>
+          <div class="font-bold text-sm text-base">github.com/LiHypnos</div>
+        </div>
+      </a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener" class="contact-card fade-up">
+        <div class="contact-icon">🔗</div>
+        <div>
+          <div class="font-mono text-xs text-muted uppercase tracking-wider">LinkedIn</div>
+          <div class="font-bold text-sm text-base">linkedin.com/in/elian-costa</div>
+        </div>
+      </a>
+      <div class="contact-card fade-up" style="cursor:default;">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="font-mono text-xs text-muted uppercase tracking-wider" data-i18n="contact.loc">Localização</div>
+          <div class="font-bold text-sm text-base">Lavras, MG – Brasil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-base border-t border-base py-8 text-center">
+  <p class="font-mono text-xs text-muted">© 2026 Elian Fernando Simões Costa &nbsp;·&nbsp; <span data-i18n="footer.built">Feito com Tailwind CSS</span></p>
+</footer>
+
+<script>
+// ── i18n ──────────────────────────────────────────────────────────
+const translations = {
+  pt: {
+    "nav.about":"Sobre","nav.exp":"Experiência","nav.edu":"Educação","nav.skills":"Habilidades","nav.contact":"Contato",
+    "hero.label":"→ Engenheiro de Software & Pesquisador",
+    "hero.tagline":"✦ Construindo sistemas como constelações",
+    "hero.sub":"Estudante de Ciência da Computação na UFLA.<br>Engenharia de software · Análise de dados · Visão computacional.",
+    "hero.cta1":"Ver Experiências","hero.cta2":"Entrar em Contato",
+    "stat.years":"Anos de exp.","stat.acc":"Acurácia ML","stat.red":"Redução de tempo",
+    "section.about.label":"// sobre mim","section.about.title":"Quem sou eu",
+    "about.p1":"Estudante de Ciência da Computação na Universidade Federal de Lavras com foco em engenharia de software e análise de dados. Possuo uma base sólida em design de software, sistemas orientados a dados, visão computacional, arquitetura e desenvolvimento back-end.",
+    "about.p2":"Atuo na construção de soluções que automatizam processos complexos, com foco em performance, escalabilidade e análise quantitativa.",
+    "about.lang":"Idiomas","about.soft":"Soft Skills",
+    "ss.story":"Storytelling","ss.creative":"Criatividade","ss.team":"Trabalho em equipe","ss.lead":"Liderança",
+    "ss.comm":"Comunicação","ss.solve":"Resolução de problemas","ss.adapt":"Adaptabilidade","ss.ei":"Inteligência emocional",
+    "section.exp.label":"// experiência profissional","section.exp.title":"O que já fiz",
+    "exp1.role":"Iniciação Científica – Análise de Imagens",
+    "exp1.b1":"Desenvolvi solução para mensuração de raízes em imagens com Python, Pandas, NumPy e Scikit-image.",
+    "exp1.b2":"Apliquei técnicas de processamento de imagem e análise matemática para extrair métricas de crescimento.",
+    "exp1.b3":"Possibilitei a comparação do crescimento da retícula de diferentes cepas de cafeeiros.",
+    "exp1.b4":"Redução de 99% no tempo de estimativa: de 2 semanas para 3 minutos.",
+    "exp2.role":"Iniciação Científica – Machine Learning",
+    "exp2.b1":"Projetei e implementei arquitetura de ML Servidor-Cliente para classificação de frutos de café.",
+    "exp2.b2":"Modelo com Random Forest e CNN usando TensorFlow e Keras, com acurácia de até 86%.",
+    "exp2.b3":"Automatizei a detecção de estágios de maturação, reduzindo inspeção manual.",
+    "exp3.role":"Comp Júnior – UI/UX Designer & Dev Back-End & Marketing",
+    "exp3.b1":"Liderança de todo o processo de design: pesquisa, wireframing e protótipos de alta fidelidade no Figma.",
+    "exp3.b2":"Criei e ministrei treinamentos sobre UX/UI e acessibilidade para membros trainees.",
+    "exp3.b3":"Desenvolvi APIs com Node.js e MongoDB: 5 coleções, CRUD completo, tempo médio de resposta <158ms.",
+    "exp3.b4":"Criação de posts e identidade visual para eventos, com melhora de 23% no engajamento.",
+    "section.edu.label":"// formação acadêmica","section.edu.title":"Educação","edu.degree":"Ciência da Computação",
+    "section.skills.label":"// habilidades técnicas","section.skills.title":"Ferramentas & Tecnologias",
+    "skills.lang":"Linguagens","skills.web":"Web & Back-end","skills.db":"Banco de Dados","skills.tools":"Ferramentas",
+    "section.contact.label":"// vamos conversar","section.contact.title":"Contato",
+    "contact.phone":"Telefone","contact.loc":"Localização",
+    "footer.built":"Feito com Tailwind CSS",
+    "a11y.label":"Acessibilidade","a11y.none":"Padrão","a11y.deut":"Deuteranopia",
+    "a11y.trit":"Tritanopia","a11y.hc":"Alto Contraste","a11y.lt":"Texto Grande",
+  },
+  en: {
+    
+    "nav.about":"About","nav.exp":"Experience","nav.edu":"Education","nav.skills":"Skills","nav.contact":"Contact",
+    "hero.label":"→ Software Engineer & Researcher",
+    "hero.tagline":"✦ Building systems like constellations",
+    "hero.sub":"Computer Science student at UFLA.<br>Software engineering · Data analysis · Computer vision.",
+    "hero.cta1":"View Experience","hero.cta2":"Get in Touch",
+    "stat.years":"Years of exp.","stat.acc":"ML Accuracy","stat.red":"Time reduction",
+    "section.about.label":"// about me","section.about.title":"Who I Am",
+    "about.p1":"Computer Science student at Universidade Federal de Lavras focused on software engineering and data analysis. I have a strong foundation in software design, data-oriented systems, computer vision, architecture, and back-end development.",
+    "about.p2":"I build solutions that automate complex processes, focusing on performance, scalability, and quantitative analysis.",
+    "about.lang":"Languages","about.soft":"Soft Skills",
+    "ss.story":"Storytelling","ss.creative":"Creativity","ss.team":"Teamwork","ss.lead":"Leadership",
+    "ss.comm":"Communication","ss.solve":"Problem solving","ss.adapt":"Adaptability","ss.ei":"Emotional intelligence",
+    "section.exp.label":"// professional experience","section.exp.title":"What I've Done",
+    "exp1.role":"Scientific Initiation – Image Analysis",
+    "exp1.b1":"Developed a root measurement solution using Python, Pandas, NumPy and Scikit-image.",
+    "exp1.b2":"Applied image processing and mathematical analysis techniques to extract growth metrics.",
+    "exp1.b3":"Enabled comparison of reticle growth across different coffee plant strains.",
+    "exp1.b4":"99% reduction in estimation time: from 2 weeks down to 3 minutes.",
+    "exp2.role":"Scientific Initiation – Machine Learning",
+    "exp2.b1":"Designed and implemented a Client-Server ML architecture for coffee cherry classification.",
+    "exp2.b2":"Random Forest + CNN model with TensorFlow and Keras, reaching up to 86% accuracy.",
+    "exp2.b3":"Automated ripeness-stage detection, reducing manual inspection requirements.",
+    "exp3.role":"Comp Júnior – UI/UX Designer & Back-End Dev & Marketing",
+    "exp3.b1":"Led end-to-end design process: user research, wireframing, and high-fidelity prototypes in Figma.",
+    "exp3.b2":"Created and delivered UX/UI and accessibility training for trainee members.",
+    "exp3.b3":"Built APIs with Node.js and MongoDB: 5 collections, full CRUD, avg response time <158ms.",
+    "exp3.b4":"Created social media posts and visual identity for events, achieving a 23% engagement increase.",
+    "section.edu.label":"// academic background","section.edu.title":"Education","edu.degree":"Computer Science",
+    "section.skills.label":"// technical skills","section.skills.title":"Tools & Technologies",
+    "skills.lang":"Languages","skills.web":"Web & Back-end","skills.db":"Databases","skills.tools":"Tools",
+    "section.contact.label":"// let's talk","section.contact.title":"Contact",
+    "contact.phone":"Phone","contact.loc":"Location",
+    "footer.built":"Built with Tailwind CSS",
+    "a11y.label":"Accessibility","a11y.none":"Default","a11y.deut":"Deuteranopia",
+    "a11y.trit":"Tritanopia","a11y.hc":"High Contrast","a11y.lt":"Large Text",
+  }
+};
+let currentLang = 'pt';
+function applyLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[el.dataset.i18n];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+  document.getElementById('langLabel').textContent = lang === 'pt' ? 'EN' : 'PT';
+}
+document.getElementById('langBtn').addEventListener('click', () => applyLang(currentLang === 'pt' ? 'en' : 'pt'));
+
+// ── Theme ─────────────────────────────────────────────────────────
+let dark = true; // starts dark
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('themeIcon').textContent = dark ? '☀️' : '🌙';
+}
+applyTheme();
+document.getElementById('themeBtn').addEventListener('click', () => { dark = !dark; applyTheme(); });
+
+// ── A11y ──────────────────────────────────────────────────────────
+const a11yPanel = document.getElementById('a11yPanel');
+let currentA11y = 'none';
+document.getElementById('a11yBtn').addEventListener('click', e => { e.stopPropagation(); a11yPanel.classList.toggle('open'); });
+document.addEventListener('click', () => a11yPanel.classList.remove('open'));
+document.querySelectorAll('.a11y-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode;
+    document.querySelectorAll('.a11y-opt').forEach(b => b.classList.remove('active'));
+    if (mode === 'none') { document.documentElement.removeAttribute('data-a11y'); currentA11y = 'none'; }
+    else { document.documentElement.setAttribute('data-a11y', mode); currentA11y = mode; btn.classList.add('active'); }
+    a11yPanel.classList.remove('open');
+  });
+});
+
+// ── Mobile menu ───────────────────────────────────────────────────
+document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.toggle('open'));
+document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
+
+// ── Fade-up observer ──────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
