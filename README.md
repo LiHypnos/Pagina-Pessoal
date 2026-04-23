@@ -7,9 +7,10 @@
 
 ```
 /
-├── bootstrap/
+├── Bootstrap/
 │   └── index.html        ← Versão com Bootstrap 5
-├── index.html        ← Versão com Tailwind CSS
+├── Tailwind/
+    └── index.html        ← Versão com Tailwind CSS
 ├── LICENSE
 ├── .gitignore
 └── README.md
@@ -60,6 +61,13 @@
 ## 🌍 Internacionalização
 
 Botão `EN / PT` na navbar alterna todos os textos da página via sistema i18n próprio em JavaScript puro.
+
+---
+
+## 🌐 Como acessar
+
+[![Tailwind](https://img.shields.io/badge/Tailwind-Online-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://lihypnos.github.io/Pagina-Pessoal/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-Online-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://lihypnos.github.io/Pagina-Pessoal/bootstrap/)
 
 ---
 
